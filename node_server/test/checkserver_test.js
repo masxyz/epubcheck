@@ -73,12 +73,7 @@ describe('checkserver tests', function () {
         .get('/')
         .expect(200)
         .end(function (err, res) {
-          if (err)
-          {
-            console.log(res.text);
-            console.log(err);
-            debug_dump(err, 'error');
-          }
+          log_err(err, res);
           assert.equal(err, null);
           done();
         })
@@ -92,12 +87,7 @@ describe('checkserver tests', function () {
         .get('/reset_default_messages')
         .expect(200)
         .end(function (err, res) {
-          if (err)
-          {
-            console.log(res.text);
-            console.log(err);
-            debug_dump(err, 'error');
-          }
+          log_err(err, res);
           assert.equal(err, null);
           messages = JSON.parse(res.text);
           assert.equal(messages.length, expectedMessageCount);
@@ -114,16 +104,11 @@ describe('checkserver tests', function () {
       messages[0].severity = "USAGE";
       request(app)
         .post('/set_messages')
-        .set('checkmessages', JSON.stringify(messages))
+        .set('checkmessages', JSON.stringify([messages[0]]))
         .expect(200)
         .end(function (err, res)
         {
-          if (err)
-          {
-            console.log(res.text);
-            console.log(err);
-            debug_dump(err, 'error');
-          }
+          log_err(err, res);
           assert.equal(err, null);
           done();
         });
@@ -136,15 +121,10 @@ describe('checkserver tests', function () {
         .get('/get_messages')
         .expect(200)
         .end(function (err, res) {
-          if (err)
-          {
-            console.log(res.text);
-            console.log(err);
-            debug_dump(err, 'error');
-          }
+          log_err(err, res);
           assert.equal(err, null);
           messages = JSON.parse(res.text);
-          assert.equal(messages.length, expectedMessageCount);
+          assert.equal(messages.length, 1);
           var firstMessage = messages[0];
           assert.equal(firstMessage.severity, 'USAGE');
           done();
@@ -158,12 +138,7 @@ describe('checkserver tests', function () {
         .get('/reset_default_messages')
         .expect(200)
         .end(function (err, res) {
-          if (err)
-          {
-            console.log(res.text);
-            console.log(err);
-            debug_dump(err, 'error');
-          }
+          log_err(err, res);
           assert.equal(err, null);
           messages = JSON.parse(res.text);
           assert.equal(messages.length, expectedMessageCount);
@@ -185,12 +160,7 @@ describe('checkserver tests', function () {
         .attach('Toy_modified.epub', 'node_server/test/Toy_modified.epub')
         .expect(200)
         .end(function (err, res) {
-          if (err)
-          {
-            console.log(res.text);
-            console.log(err);
-            debug_dump(err, 'error');
-          }
+          log_err(err, res);
           assert.equal(err, null);
           var results = JSON.parse(res.text);
           assert.equal(results.length, 2);
@@ -223,12 +193,7 @@ describe('checkserver tests', function () {
         .set('timestamp', timestamp)
         .expect(200)
         .end(function (err, res) {
-          if (err)
-          {
-            console.log(res.text);
-            console.log(err);
-            debug_dump(err, 'error');
-          }
+          log_err(err, res);
           assert.equal(err, null);
           var results = JSON.parse(res.text);
           assert.equal(results.items.length, 7);
@@ -249,12 +214,7 @@ describe('checkserver tests', function () {
         .set('timestampB', timestamp)
         .expect(200)
         .end(function (err, res) {
-          if (err)
-          {
-            console.log(res.text);
-            console.log(err);
-            debug_dump(err, 'error');
-          }
+          log_err(err, res);
           assert.equal(err, null);
           var results = JSON.parse(res.text);
           assert.equal(results.summary.itemChanges, 3);
@@ -275,4 +235,18 @@ var debug_dump = function (o, name) {
     }
   }
 };
+
+var log_err = function (err, res)
+{
+  if (err)
+  {
+    if (res)
+    {
+      console.log(res.text);
+    }
+    console.log(err);
+    debug_dump(err, 'error');
+  }
+};
+
 
