@@ -497,7 +497,7 @@ public class Epub30CheckExpandedTest extends AbstractEpubCheckTest
   public void testValidateEPUB30_nonresolvingFallback()
   {
     List<MessageId> expectedErrors = new ArrayList<MessageId>();
-    Collections.addAll(expectedErrors, MessageId.RSC_005, MessageId.OPF_040, MessageId.OPF_040, MessageId.MED_003);
+    Collections.addAll(expectedErrors, MessageId.RSC_005, MessageId.OPF_040, MessageId.MED_003);
     List<MessageId> expectedWarnings = new ArrayList<MessageId>();
     //dupe messages, tbf
     Collections.addAll(expectedWarnings, MessageId.CSS_022, MessageId.CSS_022);
@@ -726,5 +726,15 @@ public class Epub30CheckExpandedTest extends AbstractEpubCheckTest
     Collections.addAll(expectedWarnings, MessageId.CSS_022, MessageId.CSS_022);
     testValidateDocument("valid/issue270/", expectedErrors, expectedWarnings);
 	}
+	
+  @Test
+  public void testXHTMExtension()
+  {
+    List<MessageId> expectedErrors = new ArrayList<MessageId>();
+    List<MessageId> expectedWarnings = new ArrayList<MessageId>();
+    List<MessageId> expectedFatals = new ArrayList<MessageId>();
+    Collections.addAll(expectedWarnings, MessageId.HTM_014a);
+    testValidateDocument("invalid/xhtml-extension", expectedErrors, expectedWarnings, expectedFatals, true);
+  }
 
 }

@@ -22,12 +22,13 @@
 
 package com.adobe.epubcheck.api;
 
-import com.adobe.epubcheck.messages.MessageId;
-import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import org.junit.Test;
+
+import com.adobe.epubcheck.messages.MessageId;
 
 public class Epub20CheckExpandedTest extends AbstractEpubCheckTest
 {
@@ -162,4 +163,13 @@ public class Epub20CheckExpandedTest extends AbstractEpubCheckTest
     Collections.addAll(expectedWarnings, MessageId.CSS_022, MessageId.CSS_022);
     testValidateDocument("valid/issue267/", expectedErrors, expectedWarnings, "valid/issue267.txt");
 	}
+	
+  @Test
+  public void testXHTMLExtension()
+  {
+    List<MessageId> expectedErrors = new ArrayList<MessageId>();
+    List<MessageId> expectedWarnings = new ArrayList<MessageId>();
+    Collections.addAll(expectedWarnings, MessageId.HTM_014);
+    testValidateDocument("invalid/xhtml-extension", expectedErrors, expectedWarnings);
+  }
 }
